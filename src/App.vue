@@ -1,6 +1,9 @@
 <template>
     <div class="app">
-        <post-form @save="savePost" />
+        <comp-button @click="dialogShow = true">Add Post</comp-button>
+        <comp-dialog v-model:show="dialogShow">
+            <post-form @save="savePost" />
+        </comp-dialog>
         <post-list @remove="removePost" :posts="posts"/>
     </div>
 </template>
@@ -23,12 +26,14 @@ export default {
                 {id: 4, title: "Post title 4", text: "Post long text 4"},
             ],
             title: "",
-            text: ""
+            text: "",
+            dialogShow: false,
         }
     },
     methods : {
         savePost(data) {
             this.posts.push(data)
+            this.dialogShow = false
             return true;
         },
 
