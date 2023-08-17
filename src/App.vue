@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <post-form @save="savePost" />
-        <post-list :posts="posts"/>
+        <post-list @remove="removePost" :posts="posts"/>
     </div>
 </template>
 
@@ -31,6 +31,11 @@ export default {
             this.posts.push(data)
             return true;
         },
+
+
+        removePost(post) {
+            this.posts = this.posts.filter(p => p.id !== post.id);
+        }
 
         // titleInput(event){
         //     this.title = event.target.value;

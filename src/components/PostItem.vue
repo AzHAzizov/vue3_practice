@@ -13,7 +13,7 @@
             </div>
             
             <div class="action">
-                <comp-button class="remove">
+                <comp-button @click="$emit('remove', post)" class="remove">
                     Remove
                 </comp-button>
             </div>

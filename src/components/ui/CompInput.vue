@@ -1,5 +1,5 @@
 <template>
-        <input :value="modelValue" @input="updateInput">
+        <input @input="updateInput" :value="modelValue">
 </template>
 
 <script>
@@ -7,7 +7,7 @@
         name: "comp-input",
 
         props: {
-            modelValue: [String, Number]
+            modelValue: [String, Number],
         },
 
         methods: {
