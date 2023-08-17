@@ -1,20 +1,19 @@
 <template>
-    <div>
-        <div class="post" v-for="post in posts" v-bind:key="post.id">
-            <div>
-                <strong>Title</strong>
-                <span>{{post.title}}</span>
-            </div>    
-            <div>
-                <strong>Text</strong>
-                <span>{{post.text}}</span>
-            </div>    
-        </div>
+    <div class="app">
+        <post-form @save="savePost" />
+        <post-list :posts="posts"/>
     </div>
 </template>
 
 <script>
+import PostForm from './components/PostForm.vue'
+import PostList from './components/PostList.vue'
+
+
 export default {
+    components: {
+        PostForm, PostList
+    },
     data() {
         return {
             posts: [
@@ -22,25 +21,31 @@ export default {
                 {id: 2, title: "Post title 2", text: "Post long text 2"},
                 {id: 3, title: "Post title 3", text: "Post long text 3"},
                 {id: 4, title: "Post title 4", text: "Post long text 4"},
-            ]
+            ],
+            title: "",
+            text: ""
         }
+    },
+    methods : {
+        savePost(data) {
+            this.posts.push(data)
+            return true;
+        },
+
+        // titleInput(event){
+        //     this.title = event.target.value;
+        // },
+        // textInput(event){
+        //     this.text = event.target.value;
+        // }
     }
 }
 </script>
 
 <style lang="css" scoped>
 
-.post{
-    border: 2px solid rgb(61, 177, 86);
-    margin-bottom: 5px;
-    max-width: 1200px;
-    padding: 10px 0 10px 10px;
-}
 
 
-.post > div > strong {
-    margin-right: 5px;
-}
 
 
 </style>    
