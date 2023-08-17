@@ -3,7 +3,7 @@
         <form @submit.prevent>
             <h4>Craete new Post</h4>
             <comp-input v-model="post.title" type="text" placeholder="Title" />
-            <comp-input v-model="post.data" type="text" placeholder="Text" />
+            <comp-input v-model="post.body" type="text" placeholder="Text" />
 
             <comp-button  @click="createPost">
                 Save
@@ -19,7 +19,7 @@ export default {
         return {
             post: {
                 title: "",
-                text: ""
+                body: ""
             }
         }
     },
@@ -32,7 +32,7 @@ export default {
 
             this.post = {
                 title: "",
-                text: ""
+                body: ""
             }
 
             // this.post.title = "123123123";
