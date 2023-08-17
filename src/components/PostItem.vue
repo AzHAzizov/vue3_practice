@@ -8,7 +8,7 @@
                 </div>    
                 <div>
                     <strong>Text: </strong>
-                    <span>{{post.text}}</span>
+                    <span>{{post.body}}</span>
                 </div>   
             </div>
             

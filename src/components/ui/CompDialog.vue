@@ -19,7 +19,8 @@ export default {
         hideDialogWindow() {
             this.$emit('update:show', false)
         }
-    }
+    },
+
 
 }
 </script>

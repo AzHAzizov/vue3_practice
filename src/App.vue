@@ -1,6 +1,7 @@
 <template>
     <div class="app">
         <comp-button @click="dialogShow = true">Add Post</comp-button>
+        <comp-button @click="fetchPosts"> Load Posts </comp-button>
         <comp-dialog v-model:show="dialogShow">
             <post-form @save="savePost" />
         </comp-dialog>
@@ -11,6 +12,7 @@
 <script>
 import PostForm from './components/PostForm.vue'
 import PostList from './components/PostList.vue'
+import axios from 'axios'
 
 
 export default {
@@ -20,13 +22,10 @@ export default {
     data() {
         return {
             posts: [
-                {id: 1, title: "Post title 1", text: "Post long text 1"},
-                {id: 2, title: "Post title 2", text: "Post long text 2"},
-                {id: 3, title: "Post title 3", text: "Post long text 3"},
-                {id: 4, title: "Post title 4", text: "Post long text 4"},
+               
             ],
             title: "",
-            text: "",
+            body: "",
             dialogShow: false,
         }
     },
@@ -40,6 +39,19 @@ export default {
 
         removePost(post) {
             this.posts = this.posts.filter(p => p.id !== post.id);
+        },
+
+
+        async fetchPosts() {
+            try {
+                
+
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+                this.posts = response.data
+
+            } catch (error) {
+                alert("Error on get posts from SERVER")
+            }
         }
 
         // titleInput(event){
@@ -48,6 +60,7 @@ export default {
         // textInput(event){
         //     this.text = event.target.value;
         // }
+
     }
 }
 </script>
