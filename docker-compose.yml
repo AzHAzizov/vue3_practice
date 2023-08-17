@@ -1,0 +1,10 @@
+version: '2'
+services:
+    node:
+        image: node:19-alpine
+        volumes:
+            - ./:/var/www
+        working_dir: /var/www
+        tty: true
+        ports:
+            - "8089:8080"
