@@ -105,12 +105,17 @@ export default {
 
 
             this.currentPage = pageN;
-            this.fetchPosts();
+           
         }
 
     },
 
 
+    watch:{
+        currentPage() {
+            this.fetchPosts();
+        }
+    },  
 
     mounted() {
         this.fetchPosts();
