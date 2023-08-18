@@ -1,6 +1,10 @@
 <template>
+    <!-- eslint-disable -->
     <div class="app">
-        <comp-button @click="dialogShow = true">Add Post</comp-button>
+        <div class="app__navbar_actions">
+            <comp-button @click="dialogShow = true">Add Post</comp-button>
+            <comp-select v-model="selectedSort" v-model:options="sortOptions" />
+        </div>
         <comp-dialog v-model:show="dialogShow">
             <post-form @save="savePost" />
         </comp-dialog>
@@ -23,13 +27,16 @@ export default {
     },
     data() {
         return {
-            posts: [
-               
-            ],
+            posts: [],
             title: "",
             body: "",
             dialogShow: false,
             isPostLoading: true,
+            selectedSort: "",
+            sortOptions: [
+                {value: 'title', name: "По тайтлу", id: 1},
+                {value: 'body', name: "По тексту", id: 2}
+            ],
         }
     },
     methods : {
@@ -71,12 +78,26 @@ export default {
     },
     mounted() {
         this.fetchPosts();
+    },
+
+    watch: {
+        selectedSort(newValue) {
+            this.posts.sort((post1, post2) => {
+                return post1[newValue]?.localeCompare(post2[newValue]);
+            });
+        }
     }
 }
 </script>
 
 <style lang="css" scoped>
 
+.app > .app__navbar_actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;    
+}
 
 
 
