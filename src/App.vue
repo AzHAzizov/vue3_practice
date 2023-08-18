@@ -8,7 +8,7 @@
         <comp-dialog v-model:show="dialogShow">
             <post-form @save="savePost" />
         </comp-dialog>
-        <post-list v-if="!isPostLoading" @remove="removePost" :posts="posts"/>
+        <post-list v-if="!isPostLoading" @remove="removePost" :posts="sortedPost"/>
         <h2 v-else>
             Posts are loading...
         </h2>
@@ -79,14 +79,13 @@ export default {
     mounted() {
         this.fetchPosts();
     },
-
-    watch: {
-        selectedSort(newValue) {
-            this.posts.sort((post1, post2) => {
-                return post1[newValue]?.localeCompare(post2[newValue]);
-            });
+    computed: {
+        sortedPost() {
+            return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
         }
-    }
+    },  
+
+   
 }
 </script>
 
