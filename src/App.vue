@@ -2,16 +2,27 @@
     <!-- eslint-disable -->
     <div class="app">
         <div class="app__navbar_actions">
+
+
             <comp-button @click="dialogShow = true">Add Post</comp-button>
-            <comp-select v-model="selectedSort" v-model:options="sortOptions" />
+            
+            <div>
+                <comp-input v-model="searchQuery" placeholder="Search"/>
+                <comp-select v-model="selectedSort" v-model:options="sortOptions" />
+            </div>
         </div>
         <comp-dialog v-model:show="dialogShow">
             <post-form @save="savePost" />
         </comp-dialog>
-        <post-list v-if="!isPostLoading" @remove="removePost" :posts="sortedPost"/>
+        <post-list v-if="!isPostLoading" @remove="removePost" :posts="searchedSortedPosts"/>
         <h2 v-else>
             Posts are loading...
         </h2>
+
+
+        <div class="page__wrapper">
+            <div v-for="n in this.totalPages"  :key="n" class="page" :class="{'current__page': n === currentPage}" @click="changePage(n)">{{n}}</div>
+        </div>
     </div>
 </template>
 
@@ -33,12 +44,20 @@ export default {
             dialogShow: false,
             isPostLoading: true,
             selectedSort: "",
+            searchQuery: "",
+
+            currentPage: 1,
+            postsPerPage: 10,
+            totalPages : 0,
+
             sortOptions: [
                 {value: 'title', name: "По тайтлу", id: 1},
                 {value: 'body', name: "По тексту", id: 2}
             ],
         }
     },
+
+
     methods : {
         savePost(data) {
 
@@ -50,6 +69,8 @@ export default {
         },
 
 
+        
+
         removePost(post) {
             this.posts = this.posts.filter(p => p.id !== post.id);
         },
@@ -58,30 +79,49 @@ export default {
         async fetchPosts() {
             try {
 
-                const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+                    params: {
+                        _page: this.currentPage,
+                        _limit: this.postsPerPage
+                    }
+                });
                 this.posts = response.data
+
+
+                this.totalPages = Math.ceil(response.headers['x-total-count'] / this.postsPerPage);
 
             } catch (error) {
                 alert("Error on get posts from SERVER")
             }finally {
                 this.isPostLoading = false;
             }
+        },
+
+        changePage(pageN) {
+
+            // Если принимать event, то он отправит  pointEvent. То есть данные о точеке который мы кликали 
+
+            // console.log(pageN)
+
+
+            this.currentPage = pageN;
+            this.fetchPosts();
         }
 
-        // titleInput(event){
-        //     this.title = event.target.value;
-        // },
-        // textInput(event){
-        //     this.text = event.target.value;
-        // }
-
     },
+
+
+
     mounted() {
         this.fetchPosts();
     },
     computed: {
         sortedPost() {
             return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+        },
+
+        searchedSortedPosts() {
+            return this.sortedPost.filter(post => post.title.includes(this.searchQuery));
         }
     },  
 
@@ -99,6 +139,22 @@ export default {
 }
 
 
+.page__wrapper {
+    display: flex;
+    margin-top: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.page {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+
+.current__page {
+    border: 2.2px solid teal;
+}
 
 
 </style>    
