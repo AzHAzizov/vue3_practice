@@ -13,8 +13,11 @@
             </div>
             
             <div class="action">
-                <comp-button @click="$emit('remove', post)" class="remove">
+                <comp-button @click="$emit('remove', post)" class="open">
                     Remove
+                </comp-button>
+                <comp-button @click="$router.push(`/posts/${post.id}`)" class="remove">
+                    Open
                 </comp-button>
             </div>
         </div>
@@ -52,8 +55,12 @@ export default {
 }
 
 .post > button.remove {
+    color: yellowgreen;
+}
+
+.post > button.open {
     color: red;
-}s
+}
 
 
 .post > .action {

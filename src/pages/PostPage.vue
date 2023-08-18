@@ -18,7 +18,7 @@
         <h2 v-else>
             Posts are loading...
         </h2>
-        <div ref="observer" class="observe"></div>
+        <div v-intersection="loadNextPosts" class="observe"></div>
     </div>
 </template>
 
@@ -126,21 +126,6 @@ export default {
 
     mounted() {
         this.fetchPosts();
-
-        const options = {
-            rootMargin: "0px",
-            threshold: 1.0,
-        };
-
-        const callback = (entries)  => {
-            if(entries[0].isIntersecting) {
-                this.loadNextPosts();
-            }
-        }
-
-
-        const observer = new IntersectionObserver(callback, options);
-        observer.observe(this.$refs.observer)
     },
     computed: {
         sortedPost() {
