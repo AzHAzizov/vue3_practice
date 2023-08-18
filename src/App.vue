@@ -18,11 +18,7 @@
         <h2 v-else>
             Posts are loading...
         </h2>
-
-
-        <div class="page__wrapper">
-            <div v-for="n in this.totalPages"  :key="n" class="page" :class="{'current__page': n === currentPage}" @click="changePage(n)">{{n}}</div>
-        </div>
+        <div ref="observer" class="observe"></div>
     </div>
 </template>
 
@@ -97,28 +93,57 @@ export default {
             }
         },
 
-        changePage(pageN) {
+        async loadNextPosts() {
+            try {
 
-            // Если принимать event, то он отправит  pointEvent. То есть данные о точеке который мы кликали 
+                this.currentPage += 1;
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+                    params: {
+                        _page: this.currentPage,
+                        _limit: this.postsPerPage
+                    }
+                });
+                this.posts = [...this.posts, ...response.data]
 
-            // console.log(pageN)
+
+                this.totalPages = Math.ceil(response.headers['x-total-count'] / this.postsPerPage);
+
+            } catch (error) {
+                alert("Error on get posts from SERVER")
+            }finally {
+                this.isPostLoading = false;
+            }
+        },
 
 
-            this.currentPage = pageN;
-           
-        }
 
     },
 
 
     watch:{
-        currentPage() {
-            this.fetchPosts();
-        }
+       
     },  
 
     mounted() {
         this.fetchPosts();
+
+
+        
+
+        const options = {
+            rootMargin: "0px",
+            threshold: 1.0,
+        };
+
+        const callback = (entries)  => {
+            if(entries[0].isIntersecting) {
+                this.loadNextPosts();
+            }
+        }
+
+
+        const observer = new IntersectionObserver(callback, options);
+        observer.observe(this.$refs.observer)
     },
     computed: {
         sortedPost() {
