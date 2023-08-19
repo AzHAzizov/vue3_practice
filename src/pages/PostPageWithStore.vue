@@ -22,13 +22,18 @@
 
 <script>
 // import PostForm from '@/components/PostForm.vue'
-// import PostList from '@/components/PostList.vue'
+import PostList from '@/components/PostList.vue'
 import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
 
 
 
 
 export default {
+
+    components: {
+        PostList
+    },
+
     data() {
         return {
             dialogShow: false  
@@ -38,11 +43,12 @@ export default {
 
     methods : {
         ...mapActions({
-            setCurrentPage: 'post/setCurrentPage'
-        }),
-        ...mapMutations({
             loadNextPosts: 'post/loadNextPosts',
             fetchPosts: 'post/fetchPosts',
+        }),
+        ...mapMutations({
+            setCurrentPage: 'post/setCurrentPage'
+         
         }),
 
 

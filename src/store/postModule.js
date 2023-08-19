@@ -22,7 +22,12 @@ export const postModule = {
         },
 
         searchedSortedPosts(state, getters) {
-            return getters.sortedPost.filter(post => post.title.includes(state.searchQuery));
+
+            const finalData = getters.sortedPost.filter(post => post.title.includes(state.searchQuery));
+
+            console.log(finalData);
+
+            return finalData;
         }
     },
     mutations: {
