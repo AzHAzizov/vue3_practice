@@ -5,6 +5,7 @@
              <comp-button @click="$router.push('/posts')">Posts</comp-button>
              <comp-button @click="$router.push('/about')">About Us</comp-button>
              <comp-button @click="$router.push('/storePost')">Store Posts</comp-button>
+             <comp-button @click="$router.push('/composition')">Compsitioned Posts</comp-button>
         </div>
     </div>
 </template>
