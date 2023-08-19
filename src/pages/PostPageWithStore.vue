@@ -1,14 +1,19 @@
 <template>
     <!-- eslint-disable -->
     <div>
-        <!-- <div class="app__navbar_actions">
+        <div class="app__navbar_actions">
             <comp-button @click="dialogShow = true">Add Post</comp-button>
             
             <div>
-                <comp-input v-model="searchQuery" placeholder="Search"/>
-                <comp-select v-model="selectedSort" v-model:options="sortOptions" />
+                <comp-input 
+                    :model-value="searchQuery"
+                    @update:model-value="setSearchQuery"
+                    v-focus
+                >
+                </comp-input>
+                <comp-select :model-value="selectedSort" @update:model-value="setSelectedSort" :options="sortOptions" />
             </div>
-        </div> -->
+        </div>
         <!-- <comp-dialog v-model:show="dialogShow">
             <post-form @save="savePost" />
         </comp-dialog> -->
@@ -24,7 +29,6 @@
 // import PostForm from '@/components/PostForm.vue'
 import PostList from '@/components/PostList.vue'
 import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
-
 
 
 
@@ -47,15 +51,13 @@ export default {
             fetchPosts: 'post/fetchPosts',
         }),
         ...mapMutations({
-            setCurrentPage: 'post/setCurrentPage'
-         
+            setCurrentPage: 'post/setCurrentPage',
+            setSearchQuery: 'post/setSearchQuery',
+            setSelectedSort: 'post/setSelectedSort',
         }),
 
 
         savePost(data) {
-
-            console.log(data)
-
             this.posts.push(data)
             this.dialogShow = false
             return true;
@@ -67,23 +69,19 @@ export default {
         },
     },
 
-
-    watch:{
-       
-    },  
-
     mounted() {
         this.fetchPosts();
     },
     computed: {
         ...mapState({
-            posts : state => state.posts,
-            isPostLoading : state => state.isPostLoading,
-            selectedSort : state => state.selectedSort,
-            searchQuery : state => state.searchQuery,
-            currentPage : state => state.currentPage,
-            postsPerPage : state => state.postsPerPage,
-            totalPages : state => state.totalPages,
+            posts : state => state.post.posts,
+            isPostLoading : state => state.post.isPostLoading,
+            selectedSort : state => state.post.selectedSort,
+            searchQuery : state => state.post.searchQuery,
+            currentPage : state => state.post.currentPage,
+            postsPerPage : state => state.post.postsPerPage,
+            totalPages : state => state.post.totalPages,
+            sortOptions : state => state.post.sortOptions,
         }),
         ...mapGetters({
             sortedPost: 'post/sortedPost',

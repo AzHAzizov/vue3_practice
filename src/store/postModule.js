@@ -22,12 +22,7 @@ export const postModule = {
         },
 
         searchedSortedPosts(state, getters) {
-
-            const finalData = getters.sortedPost.filter(post => post.title.includes(state.searchQuery));
-
-            console.log(finalData);
-
-            return finalData;
+            return getters.sortedPost.filter(post => post.title.toLowerCase().includes(state.searchQuery.toLowerCase()));
         }
     },
     mutations: {
