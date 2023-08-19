@@ -2,13 +2,7 @@
     <!-- eslint-disable -->
     <div class="app">
 
-        <div>
-            Likes : {{ likes }}
-            <comp-button @click="addLikes"> Add like </comp-button>
-        </div>
-
-        <!-- <div class="app__navbar_actions">
-
+        <div class="app__navbar_actions">
 
             <comp-button @click="dialogShow = true">Add Post</comp-button>
             
@@ -18,49 +12,44 @@
             </div>
         </div>
         <comp-dialog v-model:show="dialogShow">
-            <post-form @save="savePost" />
+            <post-form  />
         </comp-dialog>
-        <post-list v-if="!isPostLoading" @remove="removePost" :posts="searchedSortedPosts"/>
+        <post-list v-if="!isPostLoading" :posts="searchedSortedPosts"/>
         <h2 v-else>
             Posts are loading...
         </h2>
-        <div v-intersection="loadNextPosts" class="observe"></div> -->
     </div>
 </template>
 
 <script>
-// import PostForm from '@/components/PostForm.vue'
-// import PostList from '@/components/PostList.vue'
-// import axios from 'axios'
-import { ref } from 'vue'
+import PostForm from '@/components/PostForm.vue'
+import PostList from '@/components/PostList.vue'
+import {usePosts} from '@/hooks/usePosts'
+import useSortedPosts from '@/hooks/useSortedPosts'
+import useSortedAndFoundPosts from '@/hooks/useSortedAndFoundPosts'
 
 
 export default {
-    // components: {
-    //     PostForm, PostList
-    // },
+    components: {
+        PostForm, PostList
+    },
     data() {
         return {
-            // dialogShow: false,
-            // sortOptions: [
-            //     {value: 'title', name: "По тайтлу", id: 1},
-            //     {value: 'body', name: "По тексту", id: 2}
-            // ],
+            dialogShow: false,
+            sortOptions: [
+                {value: 'title', name: "По тайтлу", id: 1},
+                {value: 'body', name: "По тексту", id: 2}
+            ],
         }
     },
 
     setup() {
-        const likes  = ref(2);
+        const {posts, totalPages, isPostLoading} = usePosts(10);
+        const {selectedSort, sortedPost} = useSortedPosts(posts)
+        const {searchQuery, searchedSortedPosts} = useSortedAndFoundPosts(sortedPost)
 
 
-        const addLikes = () => {
-            likes.value +=1;
-        }
-
-        return {
-            likes,
-            addLikes
-        }
+        return {posts, totalPages, isPostLoading, selectedSort, sortedPost, searchQuery, searchedSortedPosts}
     }
 }
 </script>
